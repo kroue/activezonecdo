@@ -21,6 +21,10 @@ export default defineConfig({
   site: SITE_URL,
   output: 'static',
   trailingSlash: 'ignore',
+  build: {
+    // ~12 KB gzipped: inlining removes the only render-blocking request.
+    inlineStylesheets: 'always',
+  },
   adapter: vercel({
     // Vercel Image Optimization serves AVIF/WebP at the right size in production.
     imageService: true,

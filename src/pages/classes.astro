@@ -38,7 +38,7 @@ const classSchema = {
   <PageHero
     eyebrow="Classes & coaching"
     title="Fitness classes in Cagayan de Oro"
-    lede="Zumba and Boxing classes in CDO, HIIT with the group, or one-on-one help on the floor. Every class welcomes beginners."
+    lede="Zumba and Boxing classes in CDO, HIIT with the group, or fitness coaching and personal training on the floor. Every class welcomes beginners."
     photo="strong-nation"
     crumbs={crumbs}
   >
@@ -101,7 +101,7 @@ const classSchema = {
                   </div>
                   <div>
                     <dt class="font-semibold">Without membership</dt>
-                    <dd class="text-slate">{single ? `${peso(single.price)} per session` : 'Ask us about access'}</dd>
+                    <dd class="text-slate">{single ? `${peso(single.price)} per session` : c.plans === 'all' ? 'Included with membership' : 'Ask us about access'}</dd>
                   </div>
                 </dl>
                 <div class="mt-auto flex flex-col gap-3 pt-6 sm:flex-row">

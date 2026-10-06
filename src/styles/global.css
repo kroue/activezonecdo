@@ -109,6 +109,9 @@
   [hidden] {
     display: none !important;
   }
+  fieldset {
+    min-width: 0;
+  }
 }
 
 @layer components {
@@ -359,6 +362,11 @@
     transition:
       background-color 0.2s,
       color 0.2s;
+  }
+  @media (max-width: 400px) {
+    .segmented label {
+      padding: 0 0.8rem;
+    }
   }
   .segmented input {
     position: absolute;

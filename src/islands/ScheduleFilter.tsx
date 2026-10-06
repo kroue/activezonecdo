@@ -48,9 +48,9 @@ export default function ScheduleFilter({ entries, classes, days, hours, messenge
     <div>
       {/* Filters */}
       <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-        <fieldset>
+        <fieldset class="min-w-0">
           <legend class="field-label">Day</legend>
-          <div class="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+          <div class="no-scrollbar relative -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
             {[{ day: 'all' as const, short: 'All days', label: 'All days' }, ...days].map((d) => {
               const active = day === d.day;
               return (

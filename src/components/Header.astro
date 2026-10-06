@@ -28,7 +28,7 @@ const isActive = (href: string) => path === href || (href !== '/' && path.starts
                 href={item.href}
                 aria-current={isActive(item.href) ? 'page' : undefined}
                 class:list={[
-                  'rounded-full px-3 py-2 text-[0.95rem] font-semibold transition-colors hover:text-neon',
+                  'rounded-full px-2.5 py-2 text-[0.95rem] font-semibold whitespace-nowrap transition-colors hover:text-neon xl:px-3',
                   isActive(item.href) ? 'text-neon' : 'text-white/85',
                 ]}
               >
@@ -42,11 +42,11 @@ const isActive = (href: string) => path === href || (href !== '/' && path.starts
 
     <div class="flex items-center gap-2">
       <div class="hidden xl:block"><OpenBadge /></div>
-      <a href={`tel:${site.phone.tel}`} class="btn btn-ghost hidden !min-h-11 !px-4 md:inline-flex" aria-label={`Call ${site.phone.display}`}>
+      <a href={`tel:${site.phone.tel}`} class="btn btn-ghost hidden !min-h-11 !px-3.5 whitespace-nowrap md:inline-flex" aria-label={`Call ${site.phone.display}`}>
         <Icon name="phone" size={18} />
-        <span class="hidden lg:inline">{site.phone.display}</span>
+        <span class="hidden 2xl:inline">{site.phone.display}</span>
       </a>
-      <a href="/book-a-visit/" class="btn btn-neon hidden !min-h-11 sm:inline-flex">Book a Visit</a>
+      <a href="/book-a-visit/" class="btn btn-neon hidden !min-h-11 whitespace-nowrap sm:inline-flex">Book a Visit</a>
 
       <details class="group relative lg:hidden" data-menu>
         <summary
