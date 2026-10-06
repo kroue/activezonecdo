@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import NewToGymCta from '../components/NewToGymCta.astro';
+import { fullAddress, site } from '../config/site';
+
+const crumbs = [{ name: 'Privacy Policy', path: '/privacy/' }];
+// TODO-confirm: effective date, and the name of ActiveZone's designated Data Protection Officer (DPO).
+const effective = 'October 2026';
+---
+
+<BaseLayout
+  title="Privacy Policy | ActiveZone CDO Fitness Studio"
+  description="How ActiveZone CDO collects, uses and protects your personal information under the Philippine Data Privacy Act of 2012 (RA 10173)."
+  breadcrumbs={crumbs}
+>
+  <PageHero eyebrow="Legal" title="Privacy Policy" lede={`Effective ${effective}`} crumbs={crumbs} />
+
+  <section class="surface-light cut-top pb-20 sm:pb-24">
+    <div class="container-az">
+      <div class="prose-az mx-auto max-w-3xl space-y-8 text-[1.05rem] text-slate">
+        <p>
+          {site.name} (“ActiveZone”, “we”, “us”) respects your privacy. This policy explains how we handle personal
+          information collected through this website, in line with the Data Privacy Act of 2012 (Republic Act No. 10173),
+          its Implementing Rules and Regulations, and issuances of the National Privacy Commission (NPC).
+        </p>
+
+        <div>
+          <h2>What we collect</h2>
+          <p>When you use our “Book a Visit” form, we collect the details you choose to give us:</p>
+          <ul>
+            <li>Your name and mobile number</li>
+            <li>Your email address (optional)</li>
+            <li>What you’re interested in, whether you’re a student, your preferred day and time, whether you’re new to the gym, and any notes you add</li>
+            <li>How you found us (optional)</li>
+          </ul>
+          <p>
+            The membership calculator saves your last estimate in your own browser’s local storage so you don’t lose it. That
+            information stays on your device and is not sent to us unless you choose to send it.
+          </p>
+        </div>
+
+        <div>
+          <h2>Why we collect it</h2>
+          <ul>
+            <li>To contact you and confirm your visit</li>
+            <li>To answer your questions about memberships, classes, rates and promos</li>
+            <li>To understand how people find us, so we can improve our service</li>
+          </ul>
+          <p>We process your information based on your consent, which you give when you submit the form.</p>
+        </div>
+
+        <div>
+          <h2>How we share and store it</h2>
+          <p>
+            We do not sell your personal information. Form submissions are delivered to ActiveZone by email using a trusted
+            email delivery provider, and this website is hosted by a trusted hosting provider. These providers process data on
+            our behalf and only as needed to deliver the service. Some of them may store data outside the Philippines, with
+            safeguards in place.
+          </p>
+          <p>
+            We keep inquiry details only as long as needed to respond to you and for legitimate business records, then delete
+            them securely.
+            <!-- TODO-confirm: retention period with the owner (e.g. 12 months for non-member inquiries). -->
+          </p>
+        </div>
+
+        <div>
+          <h2>Your rights</h2>
+          <p>Under the Data Privacy Act, you have the right to:</p>
+          <ul>
+            <li>Be informed about how your personal data is processed</li>
+            <li>Access the personal data we hold about you</li>
+            <li>Correct inaccurate or outdated data</li>
+            <li>Object to processing, and withdraw your consent at any time</li>
+            <li>Ask us to erase or block your data</li>
+            <li>Data portability</li>
+            <li>Claim damages, and file a complaint with the National Privacy Commission</li>
+          </ul>
+        </div>
+
+        <div>
+          <h2>Cookies and analytics</h2>
+          <p>
+            This website does not use advertising or tracking cookies. If we add privacy-friendly analytics in the future, we
+            will update this policy.
+          </p>
+        </div>
+
+        <div>
+          <h2>Contact us</h2>
+          <p>
+            To exercise your rights or ask about this policy, contact us at
+            <a class="link" href={`tel:${site.phone.tel}`}>{site.phone.display}</a>, message us on
+            <a class="link" href={site.social.messenger} target="_blank" rel="noopener">Messenger</a>, or visit us at
+            {fullAddress}.
+          </p>
+        </div>
+
+        <div>
+          <h2>Changes to this policy</h2>
+          <p>We may update this policy from time to time. The latest version will always be on this page.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <NewToGymCta />
+</BaseLayout>
+
+<style>
+  .prose-az :global(h2) {
+    color: var(--color-ink);
+    font-size: 1.9rem;
+    margin-bottom: 0.75rem;
+  }
+  .prose-az :global(p + p),
+  .prose-az :global(ul + p),
+  .prose-az :global(p + ul) {
+    margin-top: 0.75rem;
+  }
+  .prose-az :global(ul) {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose-az :global(li + li) {
+    margin-top: 0.35rem;
+  }
+</style>

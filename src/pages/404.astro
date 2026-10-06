@@ -1,0 +1,32 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import AzMark from '../components/AzMark.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<BaseLayout title="Page not found | ActiveZone CDO" description="This page doesn't exist. Find rates, classes and hours at ActiveZone CDO." noindex>
+  <section class="surface-dark relative overflow-hidden">
+    <AzMark cut="transparent" class="pointer-events-none absolute -right-20 top-10 h-[28rem] w-auto text-white/[0.035]" />
+    <div class="container-az relative py-24 sm:py-32">
+      <p class="eyebrow">Error 404</p>
+      <h1 class="mt-4 max-w-2xl text-[clamp(3rem,10vw,6rem)] leading-[0.9]">Rest day for this page.</h1>
+      <p class="lede mt-5 max-w-xl">The page you’re looking for isn’t here. Let’s get you back to training.</p>
+      <ul class="mt-8 grid max-w-2xl gap-3 sm:grid-cols-2">
+        {
+          [
+            { href: '/', label: 'Home' },
+            { href: '/memberships/', label: 'Membership rates' },
+            { href: '/classes/', label: 'Classes' },
+            { href: '/book-a-visit/', label: 'Book a visit' },
+          ].map((l) => (
+            <li>
+              <a href={l.href} class="card-dark flex items-center justify-between p-4 font-semibold hover:border-neon">
+                {l.label} <Icon name="arrow-right" size={18} class="text-neon" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

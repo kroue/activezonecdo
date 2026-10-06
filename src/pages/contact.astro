@@ -1,0 +1,141 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import OpenBadge from '../components/OpenBadge.astro';
+import HoursTable from '../components/HoursTable.astro';
+import NewToGymCta from '../components/NewToGymCta.astro';
+import { fullAddress, site } from '../config/site';
+
+const crumbs = [{ name: 'Contact', path: '/contact/' }];
+const contacts = [
+  { href: `tel:${site.phone.tel}`, icon: 'phone', label: 'Call or text', value: site.phone.display },
+  { href: site.social.messenger, icon: 'messenger', label: 'Messenger', value: 'm.me/activezonecdo', external: true },
+  { href: site.social.facebook, icon: 'facebook', label: 'Facebook', value: 'facebook.com/activezonecdo', external: true },
+  { href: site.social.instagram, icon: 'instagram', label: 'Instagram', value: '@activezonecdo', external: true },
+  { href: site.social.tiktok, icon: 'tiktok', label: 'TikTok', value: site.social.tiktokHandle, external: true },
+];
+const amenities = [
+  { icon: 'shower-head', label: 'Showers' },
+  { icon: 'bath', label: 'Restroom' },
+  { icon: 'car', label: 'Free parking lot' },
+  { icon: 'map', label: 'Free street parking' },
+  { icon: 'credit-card', label: 'Credit & debit cards' },
+  { icon: 'rainbow', label: 'LGBTQ+ friendly' },
+  { icon: 'shield-check', label: 'Transgender safe space' },
+];
+---
+
+<BaseLayout
+  title="Gym in Divisoria, Cagayan de Oro | Location & Contact | ActiveZone CDO"
+  description="Find ActiveZone CDO at the 3rd Floor, Guerrero Adaza Building, Rizal corner Hayes Street, Divisoria, Cagayan de Oro. Call 0926 755 6237. Free parking, showers."
+  ogImage="contact"
+  breadcrumbs={crumbs}
+>
+  <PageHero
+    eyebrow="Location & contact"
+    title="Find us in Divisoria"
+    lede="3rd Floor, Guerrero Adaza Building, Rizal corner Hayes Street. Right in the heart of Cagayan de Oro."
+    crumbs={crumbs}
+  >
+    <div class="mt-6"><OpenBadge /></div>
+  </PageHero>
+
+  <section class="surface-light cut-top pb-20 sm:pb-24">
+    <div class="container-az grid gap-8 lg:grid-cols-5">
+      <div class="lg:col-span-3">
+        <!-- Click-to-load map: keeps Google's heavy embed (and its cookies) off the page until a visitor asks for it. -->
+        <div class="relative overflow-hidden rounded-[var(--radius-card)] border border-line bg-charcoal" data-map>
+          <div class="aspect-[4/3] w-full sm:aspect-[16/10]" data-map-frame>
+            <svg class="absolute inset-0 h-full w-full" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+              <rect width="400" height="300" fill="#151715" />
+              <g stroke="#2a2d2a" stroke-width="10" fill="none">
+                <path d="M-10 70 L410 40" /><path d="M-10 180 L410 150" /><path d="M-10 270 L410 250" />
+                <path d="M60 -10 L90 310" /><path d="M190 -10 L210 310" /><path d="M320 -10 L335 310" />
+              </g>
+              <g stroke="#3a3e3a" stroke-width="18" fill="none"><path d="M-10 120 L410 92" /><path d="M262 -10 L280 310" /></g>
+            </svg>
+            <div class="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center text-white">
+              <span class="flex size-14 items-center justify-center rounded-full bg-neon text-night shadow-[0_0_0_10px_rgb(63_224_63/0.18)]">
+                <Icon name="map-pin" size={26} />
+              </span>
+              <p class="font-display text-2xl font-extrabold uppercase">ActiveZone CDO · Divisoria</p>
+              <button type="button" class="btn btn-neon" data-map-load>Show interactive map</button>
+            </div>
+          </div>
+        </div>
+        <div class="card-light mt-5 p-6">
+          <h2 class="flex items-center gap-2 text-3xl"><Icon name="navigation" size={24} class="text-leaf" /> Getting here</h2>
+          <p class="mt-3 font-semibold">{site.directionsNote}</p>
+          <address class="mt-1 text-sm not-italic text-slate">{fullAddress}</address>
+          <p class="mt-3 text-sm text-slate">
+            The building is listed as “{site.address.buildingAlt}” on Google Maps. We’re on the 3rd floor.
+            <!-- TODO-confirm: stairs/elevator access and a nearby landmark with the owner. -->
+          </p>
+          <p class="mt-3 text-sm text-slate">Parking: free parking lot and free street parking nearby.</p>
+          <div class="mt-5 flex flex-col gap-3 sm:flex-row">
+            <a href={site.directionsUrl} target="_blank" rel="noopener" class="btn btn-dark"><Icon name="navigation" size={18} /> Get directions</a>
+            <a href={site.mapsUrl} target="_blank" rel="noopener" class="btn btn-outline-dark">Open in Google Maps</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-5 lg:col-span-2">
+        <div class="card-light p-6">
+          <h2 class="text-3xl">Contact us</h2>
+          <ul class="mt-4 divide-y divide-line">
+            {
+              contacts.map((c) => (
+                <li>
+                  <a
+                    href={c.href}
+                    {...(c.external ? { target: '_blank', rel: 'noopener' } : {})}
+                    class="group flex items-center gap-4 py-3.5"
+                  >
+                    <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-night text-neon">
+                      <Icon name={c.icon} size={20} />
+                    </span>
+                    <span class="min-w-0">
+                      <span class="block text-sm text-slate">{c.label}</span>
+                      <span class="block truncate font-semibold group-hover:text-leaf">{c.value}</span>
+                    </span>
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="card-light p-6">
+          <h2 class="flex items-center gap-2 text-3xl"><Icon name="clock" size={24} class="text-leaf" /> Hours</h2>
+          <HoursTable class="mt-3" />
+        </div>
+
+        <div class="card-light p-6">
+          <h2 class="text-3xl">Amenities</h2>
+          <ul class="mt-4 grid grid-cols-2 gap-3 text-sm">
+            {
+              amenities.map((a) => (
+                <li class="flex items-center gap-2">
+                  <Icon name={a.icon} size={18} class="shrink-0 text-leaf" /> {a.label}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <NewToGymCta />
+</BaseLayout>
+
+<script define:vars={{ src: site.mapEmbedUrl }}>
+  const btn = document.querySelector('[data-map-load]');
+  btn?.addEventListener('click', () => {
+    const frame = document.querySelector('[data-map-frame]');
+    if (!frame) return;
+    frame.innerHTML = `<iframe title="Map showing ActiveZone CDO in Divisoria, Cagayan de Oro" src="${src}" class="h-full w-full" style="border:0" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>`;
+    frame.querySelector('iframe')?.focus();
+  });
+</script>

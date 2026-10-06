@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import HoursTable from '../components/HoursTable.astro';
+import OpenBadge from '../components/OpenBadge.astro';
+import Icon from '../components/Icon.astro';
+import NewToGymCta from '../components/NewToGymCta.astro';
+import ScheduleFilter from '../islands/ScheduleFilter';
+import { site } from '../config/site';
+import { schedule, weekDays } from '../data/schedule';
+import { classes, getClass } from '../data/classes';
+
+const crumbs = [{ name: 'Schedule', path: '/schedule/' }];
+// Fitness Coaching happens on the floor during gym hours, so it is not a timetable class.
+const timetableClasses = classes.filter((c) => c.id !== 'fitness-coaching').map((c) => ({ id: c.id, name: c.name }));
+const entries = schedule
+  .filter((e) => getClass(e.classId))
+  .map((e) => ({ ...e, className: getClass(e.classId)!.name }));
+---
+
+<BaseLayout
+  title="Gym Hours & Class Schedule | Zumba Class CDO | ActiveZone CDO"
+  description="ActiveZone CDO gym hours: Monday to Saturday 6 AM to 10 PM, Sunday 1 PM to 9 PM. Zumba every Tuesday and Thursday 8:30 AM. Divisoria, Cagayan de Oro."
+  ogImage="schedule"
+  breadcrumbs={crumbs}
+>
+  <PageHero
+    eyebrow="Schedule"
+    title="Gym hours & class schedule"
+    lede="The gym is open 7 days a week. Filter by day or class to plan your week."
+    photo="zumba"
+    crumbs={crumbs}
+  >
+    <div class="mt-6"><OpenBadge /></div>
+  </PageHero>
+
+  <section class="surface-light cut-top pb-20 sm:pb-24" aria-labelledby="sched-title">
+    <div class="container-az">
+      <h2 id="sched-title" class="sr-only">Weekly schedule</h2>
+      <ScheduleFilter
+        client:visible
+        entries={entries}
+        classes={timetableClasses}
+        days={[...weekDays]}
+        hours={[...site.hours]}
+        messengerUrl={site.social.messenger}
+      />
+
+      <div class="mt-14 grid gap-6 lg:grid-cols-2">
+        <div class="card-light p-6 sm:p-8">
+          <h2 class="flex items-center gap-2 text-3xl"><Icon name="clock" size={24} class="text-leaf" /> Gym hours</h2>
+          <HoursTable class="mt-4" />
+        </div>
+        <div class="card-light p-6 sm:p-8">
+          <h2 class="flex items-center gap-2 text-3xl"><Icon name="users" size={24} class="text-leaf" /> Coaching on the floor</h2>
+          <p class="mt-3 text-slate">
+            Fitness coaching happens during gym hours, not on a fixed timetable. Members get free basic coaching sessions
+            and a free fitness assessment. Book a visit and we’ll set a time that works for you.
+          </p>
+          <a href="/book-a-visit/?new=1" class="btn btn-dark mt-6">Book a visit <Icon name="arrow-right" size={18} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <NewToGymCta />
+</BaseLayout>

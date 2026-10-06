@@ -1,0 +1,96 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import Icon from '../../components/Icon.astro';
+import OpenBadge from '../../components/OpenBadge.astro';
+import HoursTable from '../../components/HoursTable.astro';
+import VisitForm from '../../islands/VisitForm';
+import { site } from '../../config/site';
+import { classes } from '../../data/classes';
+import { peso, walkIn } from '../../data/rates';
+
+const crumbs = [{ name: 'Book a Visit', path: '/book-a-visit/' }];
+// TODO-confirm: ask the owner whether to offer a trial day. Do not promise a free trial or free pass
+// on this page until confirmed (past free passes were anniversary giveaway prizes only).
+const steps = [
+  { icon: 'send', title: 'Send your details', text: 'Tell us when you’d like to come by. It takes a minute.' },
+  { icon: 'message-circle', title: 'We message you', text: 'We’ll confirm your visit by text or Messenger.' },
+  { icon: 'dumbbell', title: 'Come see the space', text: 'Meet the team, look around and ask anything.' },
+];
+---
+
+<BaseLayout
+  title="Book a Visit | Beginner-Friendly Gym in CDO | ActiveZone CDO"
+  description="Book a visit to ActiveZone CDO in Divisoria, Cagayan de Oro. New to the gym? We'll show you around and help you pick a plan. Takes a minute."
+  ogImage="visit"
+  breadcrumbs={crumbs}
+>
+  <PageHero
+    eyebrow="Book a visit"
+    title="Come see the space"
+    lede="New to the gym or switching gyms, we’ll show you around and help you choose. Dali ra mag-start!"
+    photo="coaching"
+    crumbs={crumbs}
+  />
+
+  <section class="surface-light cut-top pb-20 sm:pb-24">
+    <div class="container-az grid gap-10 lg:grid-cols-12">
+      <div class="lg:col-span-7">
+        <h2 class="text-4xl">Your visit details</h2>
+        <p class="mt-2 text-slate">Fields marked required help us reach you. Everything else is optional.</p>
+        <div class="mt-6">
+          <VisitForm
+            client:load
+            classNames={classes.map((c) => c.name)}
+            privacyUrl="/privacy/"
+            messengerUrl={site.social.messenger}
+            phoneDisplay={site.phone.display}
+            phoneTel={site.phone.tel}
+          />
+        </div>
+      </div>
+
+      <aside class="space-y-5 lg:col-span-5" aria-label="What to expect">
+        <div class="rounded-[var(--radius-card)] bg-night p-6 text-white sm:p-8">
+          <h2 class="text-3xl">How it works</h2>
+          <ol class="mt-5 space-y-5">
+            {
+              steps.map((s, i) => (
+                <li class="flex gap-4">
+                  <span class="flex size-11 shrink-0 items-center justify-center rounded-full bg-neon font-display text-xl font-extrabold text-night">
+                    {i + 1}
+                  </span>
+                  <span>
+                    <span class="block font-semibold">{s.title}</span>
+                    <span class="block text-sm text-mist">{s.text}</span>
+                  </span>
+                </li>
+              ))
+            }
+          </ol>
+          <p class="mt-6 border-t border-white/10 pt-5 text-sm text-mist">
+            When you join, your membership includes a free fitness assessment and free basic coaching sessions. Want to
+            work out on the day? Walk-in gym use is {peso(walkIn.price)}.
+          </p>
+        </div>
+
+        <div class="card-light p-6">
+          <OpenBadge tone="light" />
+          <p class="mt-4 flex gap-3">
+            <Icon name="map-pin" size={20} class="mt-0.5 shrink-0 text-leaf" />
+            <span class="text-sm">{site.directionsNote}, Cagayan de Oro City</span>
+          </p>
+          <HoursTable class="mt-3" />
+        </div>
+
+        <div class="card-light p-6">
+          <h2 class="text-2xl">Prefer to chat?</h2>
+          <div class="mt-4 grid gap-3">
+            <a href={`tel:${site.phone.tel}`} class="btn btn-dark"><Icon name="phone" size={18} /> Call {site.phone.display}</a>
+            <a href={site.social.messenger} target="_blank" rel="noopener" class="btn btn-outline-dark"><Icon name="messenger" size={18} /> Message us on Messenger</a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

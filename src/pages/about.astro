@@ -1,0 +1,100 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import AzDivider from '../components/AzDivider.astro';
+import Reviews from '../components/Reviews.astro';
+import NewToGymCta from '../components/NewToGymCta.astro';
+import { site } from '../config/site';
+
+const crumbs = [{ name: 'About', path: '/about/' }];
+
+/*
+ * TODO-confirm with the owner before launch:
+ * - Opening date (first anniversary is June 2026 per their #ActiveZoneCDOTurns1 post)
+ * - Whether they want an owner/coach story or team photos here
+ * Do not invent an owner name, founding story or coach bios.
+ */
+const values = [
+  { icon: 'smile', title: 'Never intimidating', text: 'Beginners are welcome here. Members call it non-judgmental and supportive.' },
+  { icon: 'users', title: 'Coaches who help', text: 'Free basic coaching sessions and a fitness assessment come with every membership.' },
+  { icon: 'heart', title: 'A real community', text: 'Classes like Zumba, Boxing and Strong Nation bring people together.' },
+  { icon: 'sparkles', title: 'Clean and comfortable', text: 'A spacious, well-ventilated studio that members describe as always very clean.' },
+];
+---
+
+<BaseLayout
+  title="About ActiveZone CDO | Fitness Studio in Divisoria, Cagayan de Oro"
+  description="ActiveZone CDO is a modern, beginner-friendly fitness studio on the 3rd floor of the Guerrero Adaza Building in Divisoria, Cagayan de Oro. What makes AZ home?"
+  ogImage="about"
+  breadcrumbs={crumbs}
+>
+  <PageHero
+    eyebrow="About us"
+    title="What makes AZ home?"
+    lede="A modern fitness studio in the heart of Cagayan de Oro, with coaches, classes and a community that shows up for each other."
+    photo="community-1"
+    crumbs={crumbs}
+  />
+
+  <section class="surface-light cut-top pb-20 sm:pb-24">
+    <div class="container-az grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <p class="eyebrow">Our story</p>
+        <h2 class="h-section mt-3">A fitness studio in Divisoria, CDO</h2>
+        <div class="mt-5 space-y-4 text-lg text-slate">
+          <p>
+            ActiveZone CDO Fitness Studio is on the 3rd floor of the Guerrero Adaza Building, at Rizal corner Hayes Street
+            in Divisoria. It’s a place to train on your own with a coach nearby, or join the group for Zumba, Boxing,
+            Strong Nation and HIIT.
+          </p>
+          <p>
+            In June 2026 we celebrated our first anniversary with the community that made it happen, around one simple
+            question: <strong class="text-ink">What Makes AZ Home?</strong>
+          </p>
+          <p>Read our reviews and you’ll see the same answers again and again: a welcoming space, supportive coaches and a community that feels like a second home.</p>
+        </div>
+        <p class="mt-6 inline-flex items-center gap-2 rounded-full bg-night px-4 py-2 font-display text-lg font-bold uppercase tracking-wide text-neon">
+          #ActiveZoneCDOTurns1
+        </p>
+      </div>
+      <div class="grid grid-cols-2 gap-3 sm:gap-4">
+        <Photo id="community-2" class="col-span-2 aspect-[16/10] rounded-[var(--radius-card)]" sizes="(min-width: 1024px) 50vw, 100vw" />
+        <Photo id="gym-weights" class="aspect-square rounded-2xl" sizes="(min-width: 1024px) 25vw, 50vw" widths={[360, 480, 640]} />
+        <Photo id="zumba" class="aspect-square rounded-2xl" sizes="(min-width: 1024px) 25vw, 50vw" widths={[360, 480, 640]} />
+      </div>
+    </div>
+  </section>
+
+  <section class="surface-dark cut-top pb-20 sm:pb-24" aria-labelledby="values-title">
+    <div class="container-az">
+      <p class="eyebrow">What we’re about</p>
+      <h2 id="values-title" class="h-section mt-3">Built for everyday people</h2>
+      <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          values.map((v) => (
+            <li class="card-dark reveal p-6">
+              <Icon name={v.icon} size={26} class="text-neon" />
+              <h3 class="mt-4 text-2xl">{v.title}</h3>
+              <p class="mt-2 text-mist">{v.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <AzDivider class="mx-auto mt-14 max-w-sm" />
+      <p class="mx-auto mt-6 max-w-2xl text-center text-mist">
+        Proudly LGBTQ+ friendly and a transgender safe space. Everyone is welcome at {site.shortName}.
+      </p>
+    </div>
+  </section>
+
+  <section class="surface-light cut-top pb-20 sm:pb-24" aria-labelledby="about-reviews">
+    <div class="container-az">
+      <h2 id="about-reviews" class="h-section mb-8">In our members’ words</h2>
+      <Reviews />
+    </div>
+  </section>
+
+  <NewToGymCta />
+</BaseLayout>

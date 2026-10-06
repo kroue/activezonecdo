@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import NewToGymCta from '../components/NewToGymCta.astro';
+import { site } from '../config/site';
+import { classes, planLabel } from '../data/classes';
+import { peso, sessions } from '../data/rates';
+import { schedule } from '../data/schedule';
+import { formatTime } from '../lib/hours';
+
+const crumbs = [{ name: 'Classes', path: '/classes/' }];
+const dayShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const timesFor = (id: string) => schedule.filter((s) => s.classId === id).map((s) => `${dayShort[s.day]} ${formatTime(s.start)}`);
+const sessionFor = (id?: string) => sessions.find((s) => s.id === id);
+
+const classSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Classes at ActiveZone CDO',
+  itemListElement: classes.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.name,
+    description: c.description,
+  })),
+};
+---
+
+<BaseLayout
+  title="Fitness Classes in Cagayan de Oro | Zumba, Boxing, HIIT | ActiveZone CDO"
+  description="Zumba, Boxing, Strong Nation, HIIT, Bootcamp and fitness coaching in Divisoria, Cagayan de Oro. Beginner-friendly classes. Single classes from ₱120."
+  ogImage="classes"
+  breadcrumbs={crumbs}
+  schema={[classSchema]}
+>
+  <PageHero
+    eyebrow="Classes & coaching"
+    title="Fitness classes in Cagayan de Oro"
+    lede="Zumba and Boxing classes in CDO, HIIT with the group, or one-on-one help on the floor. Every class welcomes beginners."
+    photo="strong-nation"
+    crumbs={crumbs}
+  >
+    <nav aria-label="Jump to a class" class="mt-7 flex flex-wrap gap-2 text-sm font-semibold">
+      {classes.map((c) => <a href={`#${c.id}`} class="rounded-full bg-white/10 px-3.5 py-2 hover:bg-white/15">{c.name}</a>)}
+    </nav>
+  </PageHero>
+
+  <!-- Try a single class -->
+  <section class="surface-dark cut-top bg-charcoal pb-16" aria-labelledby="single-title">
+    <div class="container-az flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+      <div>
+        <h2 id="single-title" class="text-4xl">Try a single class</h2>
+        <p class="mt-2 text-mist">No membership needed. Pay per session at the front desk.</p>
+      </div>
+      <ul class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {
+          sessions.map((s) => (
+            <li class="rounded-2xl bg-night px-4 py-3 ring-1 ring-graphite">
+              <span class="block text-sm text-mist">{s.id === 'walk-in' ? 'Gym day pass' : s.name}</span>
+              <span class="price text-3xl text-neon">{peso(s.price)}</span>
+              <span class="text-xs text-mist"> / {s.unit}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="surface-light cut-top pb-20 sm:pb-24" aria-label="All classes">
+    <div class="container-az space-y-6 sm:space-y-8">
+      {
+        classes.map((c, i) => {
+          const times = timesFor(c.id);
+          const single = sessionFor(c.sessionId);
+          return (
+            <article id={c.id} class="card-light reveal grid scroll-mt-24 overflow-hidden md:grid-cols-5" aria-labelledby={`${c.id}-title`}>
+              <Photo
+                id={c.photo}
+                class:list={['aspect-[16/9] md:col-span-2 md:aspect-auto md:min-h-72', i % 2 === 1 && 'md:order-2']}
+                sizes="(min-width: 768px) 40vw, 100vw"
+                widths={[480, 640, 768, 960]}
+              />
+              <div class="flex flex-col p-6 sm:p-8 md:col-span-3">
+                <p class="inline-flex items-center gap-2 self-start rounded-full bg-paper px-3 py-1 text-xs font-bold uppercase tracking-wider text-leaf ring-1 ring-line">
+                  <Icon name="badge-check" size={14} /> {planLabel[c.plans]}
+                </p>
+                <h2 id={`${c.id}-title`} class="mt-4 text-4xl sm:text-5xl">{c.name}</h2>
+                <p class="mt-3 text-lg text-slate">{c.description}</p>
+                <dl class="mt-5 grid gap-3 text-sm sm:grid-cols-2">
+                  <div>
+                    <dt class="font-semibold">When</dt>
+                    <dd class="text-slate">
+                      {c.id === 'fitness-coaching'
+                        ? 'During gym hours'
+                        : times.length
+                          ? times.join(' · ')
+                          : 'Times posted on Messenger'}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt class="font-semibold">Without membership</dt>
+                    <dd class="text-slate">{single ? `${peso(single.price)} per session` : 'Ask us about access'}</dd>
+                  </div>
+                </dl>
+                <div class="mt-auto flex flex-col gap-3 pt-6 sm:flex-row">
+                  <a href={`/book-a-visit/?interest=class&class=${encodeURIComponent(c.name)}`} class="btn btn-dark">
+                    Book a visit <Icon name="arrow-right" size={18} />
+                  </a>
+                  {times.length === 0 && c.id !== 'fitness-coaching' ? (
+                    <a href={site.social.messenger} target="_blank" rel="noopener" class="btn btn-outline-dark">
+                      <Icon name="messenger" size={18} /> Ask for times
+                    </a>
+                  ) : (
+                    <a href="/schedule/" class="btn btn-outline-dark">See schedule</a>
+                  )}
+                </div>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+  </section>
+
+  <NewToGymCta />
+</BaseLayout>

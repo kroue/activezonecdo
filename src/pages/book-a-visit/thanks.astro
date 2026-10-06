@@ -1,0 +1,25 @@
+---
+/** Shown after a no-JavaScript form submission. Not indexed. */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import { site } from '../../config/site';
+---
+
+<BaseLayout title="Thanks! | ActiveZone CDO" description="Thanks for booking a visit to ActiveZone CDO." noindex>
+  <section class="surface-dark">
+    <div class="container-az py-24 text-center sm:py-32">
+      <span class="mx-auto flex size-16 items-center justify-center rounded-full bg-neon text-night">
+        <Icon name="check" size={30} strokeWidth={2.5} />
+      </span>
+      <!-- TODO-confirm: typical response time with the owner before adding it here. -->
+      <h1 class="mx-auto mt-6 max-w-2xl text-[clamp(2.5rem,7vw,4.5rem)]">Thanks! We’ll message you to confirm your visit.</h1>
+      <p class="lede mx-auto mt-5 max-w-xl">
+        Want a faster reply? Call <a href={`tel:${site.phone.tel}`} class="link">{site.phone.display}</a> or message us on Messenger.
+      </p>
+      <div class="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+        <a href="/memberships/" class="btn btn-neon">See membership rates</a>
+        <a href="/" class="btn btn-ghost">Back to home</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
