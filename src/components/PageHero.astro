@@ -1,0 +1,58 @@
+---
+/** Dark hero band for inner pages, with optional background photo and visible breadcrumbs. */
+import type { PhotoId } from '../data/photos';
+import Photo from './Photo.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  lede?: string;
+  photo?: PhotoId;
+  crumbs?: { name: string; path: string }[];
+}
+const { eyebrow, title, lede, photo, crumbs = [] } = Astro.props;
+---
+
+<section class="surface-dark relative overflow-hidden">
+  {
+    photo && (
+      <Photo
+        id={photo}
+        priority
+        sizes="100vw"
+        widths={[480, 768, 1280, 1600]}
+        class="!absolute inset-0 opacity-45"
+        alt=""
+      />
+    )
+  }
+  <div class="absolute inset-0 bg-gradient-to-r from-night via-night/85 to-night/40" aria-hidden="true"></div>
+  <div class="container-az relative pb-20 pt-10 sm:pb-24 sm:pt-14">
+    {
+      crumbs.length > 0 && (
+        <nav aria-label="Breadcrumb" class="mb-6 text-sm text-mist">
+          <ol class="flex flex-wrap items-center gap-1.5">
+            <li>
+              <a href="/" class="hover:text-neon">Home</a>
+            </li>
+            {crumbs.map((c, i) => (
+              <li class="flex items-center gap-1.5">
+                <Icon name="chevron-right" size={14} />
+                {i === crumbs.length - 1 ? (
+                  <span aria-current="page" class="text-white">{c.name}</span>
+                ) : (
+                  <a href={c.path} class="hover:text-neon">{c.name}</a>
+                )}
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
+    <p class="eyebrow">{eyebrow}</p>
+    <h1 class="mt-3 max-w-3xl text-[clamp(2.5rem,8vw,4.75rem)]">{title}</h1>
+    {lede && <p class="lede mt-5 max-w-2xl">{lede}</p>}
+    <slot />
+  </div>
+</section>

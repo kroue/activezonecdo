@@ -1,0 +1,428 @@
+@import 'tailwindcss';
+
+/*
+ * ActiveZone CDO design tokens
+ * Palette sampled from the AZ logo, their Facebook cover and their rates graphic.
+ * Contrast (WCAG):
+ *   neon  on night    10.9:1  ✓ text + UI
+ *   neon  on charcoal  9.7:1  ✓
+ *   night on neon     10.9:1  ✓ button labels
+ *   leaf  on paper     5.1:1  ✓ green text on light sections (never use neon text on light)
+ *   ink   on paper    17.3:1  ✓
+ *   mist  on charcoal  7.0:1  ✓ muted text on dark
+ *   slate on paper     5.9:1  ✓ muted text on light
+ */
+
+/* Barlow Condensed and Inter have no ₱ glyph in their latin subsets. This 1 KB subset of Inter
+   supplies only U+20B1 so prices render the peso sign consistently. */
+@font-face {
+  font-family: 'AZ Peso';
+  src: url('../assets/fonts/az-peso.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+  unicode-range: U+20B1;
+}
+
+@theme {
+  --color-night: #0e0f0e;
+  --color-charcoal: #1b1d1b;
+  --color-graphite: #2a2d2a;
+  --color-neon: #3fe03f;
+  --color-neon-bright: #6cf06c;
+  --color-leaf: #15792b;
+  --color-leaf-deep: #0f5f21;
+  --color-paper: #f5f7f4;
+  --color-ink: #111311;
+  --color-mist: #a3a8a2;
+  --color-slate: #5a6159;
+  --color-line: #dde2db;
+
+  --font-display: 'AZ Peso', var(--font-barlow), 'Arial Narrow', sans-serif;
+  --font-sans: 'AZ Peso', var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1.25rem;
+  --ease-soft: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  --animate-fade-up: az-fade-up 0.7s var(--ease-soft) both;
+}
+
+@keyframes az-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: clip;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: 0.005em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    background: var(--color-neon);
+    color: var(--color-night);
+  }
+
+  /* Visible focus everywhere: neon on dark surfaces, deep green on light ones. */
+  :focus-visible {
+    outline: 3px solid var(--color-neon);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+  .surface-light :focus-visible {
+    outline-color: var(--color-leaf);
+  }
+  [hidden] {
+    display: none !important;
+  }
+}
+
+@layer components {
+  .container-az {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 640px) {
+    .container-az {
+      padding-inline: 1.5rem;
+    }
+  }
+
+  .surface-dark {
+    background-color: var(--color-night);
+    color: #fff;
+  }
+  .surface-light {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-neon);
+  }
+  .eyebrow::before {
+    content: '';
+    width: 1.75rem;
+    height: 2px;
+    background: currentColor;
+  }
+  .surface-light .eyebrow {
+    color: var(--color-leaf);
+  }
+
+  .h-section {
+    font-size: clamp(2.1rem, 6vw, 3.5rem);
+  }
+  .lede {
+    font-size: 1.075rem;
+    line-height: 1.65;
+  }
+  .surface-dark .lede,
+  .text-muted-dark {
+    color: #c9cdc8;
+  }
+  .surface-light .lede,
+  .text-muted-light {
+    color: var(--color-slate);
+  }
+  .price {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+
+  /* Buttons: min 48px tap target */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.4rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.1;
+    text-decoration: none;
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      border-color 0.2s,
+      transform 0.2s var(--ease-soft);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn-neon {
+    background: var(--color-neon);
+    color: var(--color-night);
+  }
+  .btn-neon:hover {
+    background: var(--color-neon-bright);
+  }
+  .btn-ghost {
+    border: 2px solid rgb(255 255 255 / 0.35);
+    color: #fff;
+  }
+  .btn-ghost:hover {
+    border-color: var(--color-neon);
+    color: var(--color-neon);
+  }
+  .btn-dark {
+    background: var(--color-night);
+    color: #fff;
+  }
+  .btn-dark:hover {
+    background: var(--color-charcoal);
+    color: var(--color-neon);
+  }
+  .btn-outline-dark {
+    border: 2px solid var(--color-ink);
+    color: var(--color-ink);
+  }
+  .btn-outline-dark:hover {
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  .card-dark {
+    background: var(--color-charcoal);
+    border: 1px solid var(--color-graphite);
+    border-radius: var(--radius-card);
+  }
+  .card-light {
+    background: #fff;
+    color: var(--color-ink);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+  }
+
+  .neon-rule {
+    height: 2px;
+    background: linear-gradient(90deg, var(--color-neon), transparent);
+    border: 0;
+  }
+
+  .link {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--color-neon);
+  }
+  .surface-light .link {
+    color: var(--color-leaf);
+    text-decoration-color: currentColor;
+  }
+  .link:hover {
+    text-decoration-thickness: 3px;
+  }
+
+  /* Diagonal cut between sections. The previous section shows through the cut corner. */
+  .cut-top {
+    --cut: clamp(1.5rem, 5vw, 4rem);
+    clip-path: polygon(0 var(--cut), 100% 0, 100% 100%, 0 100%);
+    margin-top: calc(var(--cut) * -1);
+    padding-top: calc(var(--cut) + 3.5rem);
+    position: relative;
+  }
+  .cut-top-rev {
+    --cut: clamp(1.5rem, 5vw, 4rem);
+    clip-path: polygon(0 0, 100% var(--cut), 100% 100%, 0 100%);
+    margin-top: calc(var(--cut) * -1);
+    padding-top: calc(var(--cut) + 3.5rem);
+    position: relative;
+  }
+
+  /* Photo tile: branded fallback behind every image so a slow or missing photo still looks intentional. */
+  .photo-tile {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(120% 90% at 85% 10%, rgb(63 224 63 / 0.16), transparent 55%),
+      linear-gradient(160deg, #1f221f, var(--color-night));
+  }
+  .photo-tile > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .shade-bottom::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(14 15 14 / 0) 30%, rgb(14 15 14 / 0.92) 100%);
+    pointer-events: none;
+  }
+
+  /* Form controls */
+  .field-label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.35rem;
+  }
+  .field {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: 0.75rem;
+    border: 1.5px solid #b9c0b7;
+    background: #fff;
+    color: var(--color-ink);
+    font-size: 1rem;
+  }
+  .field:focus-visible {
+    outline: 3px solid var(--color-leaf);
+    outline-offset: 1px;
+    border-color: var(--color-leaf);
+  }
+  .field[aria-invalid='true'] {
+    border-color: #b42318;
+  }
+  .field-error {
+    color: #b42318;
+    font-size: 0.875rem;
+    margin-top: 0.3rem;
+  }
+  .field-hint {
+    color: var(--color-slate);
+    font-size: 0.875rem;
+    margin-top: 0.3rem;
+  }
+
+  /* Segmented toggle (Regular / Student) built from radio inputs. */
+  .segmented {
+    display: inline-flex;
+    padding: 0.3rem;
+    border-radius: 999px;
+    background: var(--color-charcoal);
+    border: 1px solid var(--color-graphite);
+  }
+  .segmented label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.6rem;
+    padding: 0 1.15rem;
+    border-radius: 999px;
+    font-weight: 700;
+    cursor: pointer;
+    color: #d6dad5;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+  .segmented input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .segmented label:has(input:checked) {
+    background: var(--color-neon);
+    color: var(--color-night);
+  }
+  .segmented label:has(input:focus-visible) {
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+  }
+  .surface-light .segmented {
+    background: #e7ebe5;
+    border-color: var(--color-line);
+  }
+  .surface-light .segmented label {
+    color: var(--color-ink);
+  }
+  .surface-light .segmented label:has(input:checked) {
+    background: var(--color-night);
+    color: var(--color-neon);
+  }
+  .surface-light .segmented label:has(input:focus-visible) {
+    outline-color: var(--color-leaf);
+  }
+
+  /* Rate toggle: pure CSS, no JS. Student prices show when the student radio is checked. */
+  .rate-scope .rate-student {
+    display: none;
+  }
+  .rate-scope:has(input[value='student']:checked) .rate-student {
+    display: inline;
+  }
+  .rate-scope:has(input[value='student']:checked) .rate-regular {
+    display: none;
+  }
+}
+
+@layer utilities {
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  /* Gentle scroll-linked fade. Pure CSS; browsers without scroll timelines just show content. */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .reveal {
+        animation: az-fade-up linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry 40%;
+      }
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .fade-in {
+      animation: var(--animate-fade-up);
+    }
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

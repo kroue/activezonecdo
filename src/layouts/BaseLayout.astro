@@ -1,0 +1,96 @@
+---
+import '../styles/global.css';
+import { Font } from 'astro:assets';
+import { DEMO_MODE, site } from '../config/site';
+import { breadcrumbSchema, businessSchema } from '../lib/schema';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileBar from '../components/MobileBar.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Slug of the generated Open Graph image in /og/{slug}.png */
+  ogImage?: string;
+  /** Breadcrumb trail after Home, e.g. [{ name: 'Memberships', path: '/memberships/' }] */
+  breadcrumbs?: { name: string; path: string }[];
+  /** Extra JSON-LD objects for this page. */
+  schema?: object[];
+  noindex?: boolean;
+}
+
+const { title, description, ogImage = 'home', breadcrumbs = [], schema = [], noindex = false } = Astro.props;
+
+const origin = (Astro.site?.origin ?? Astro.url.origin).replace(/\/$/, '');
+const pathname = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonical = `${origin}${pathname}`;
+const ogUrl = `${origin}/og/${ogImage}.png`;
+const robots = DEMO_MODE || noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
+
+const jsonLd = [
+  ...businessSchema(origin),
+  ...(breadcrumbs.length ? [breadcrumbSchema(origin, breadcrumbs)] : []),
+  ...schema,
+];
+---
+
+<!doctype html>
+<html lang="en-PH">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content={robots} />
+    <meta name="theme-color" content="#0e0f0e" />
+    <meta name="format-detection" content="telephone=no" />
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:locale" content={site.ogLocale} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name}: ${site.tagline}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogUrl} />
+
+    <meta name="geo.region" content="PH-MSR" />
+    <meta name="geo.placename" content="Cagayan de Oro City" />
+    <meta name="geo.position" content={`${site.geo.lat};${site.geo.lng}`} />
+
+    <Font cssVariable="--font-barlow" preload={[{ weight: 800 }]} />
+    <Font cssVariable="--font-inter" preload />
+
+    {jsonLd.map((obj) => <script type="application/ld+json" set:html={JSON.stringify(obj)} />)}
+    <slot name="head" />
+  </head>
+  <body class="min-h-dvh">
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <MobileBar />
+    {
+      DEMO_MODE && (
+        <p
+          class="pointer-events-none fixed bottom-[4.75rem] left-3 z-30 rounded-full bg-white/95 px-3 py-1 text-[0.7rem] font-bold tracking-wide text-ink shadow-lg ring-1 ring-black/10 md:bottom-4"
+        >
+          {site.credit.label}
+        </p>
+      )
+    }
+  </body>
+</html>

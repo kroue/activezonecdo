@@ -1,0 +1,262 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import AzMark from '../components/AzMark.astro';
+import AzDivider from '../components/AzDivider.astro';
+import OpenBadge from '../components/OpenBadge.astro';
+import StatsStrip from '../components/StatsStrip.astro';
+import PlanCards from '../components/PlanCards.astro';
+import RateToggle from '../components/RateToggle.astro';
+import ClassGrid from '../components/ClassGrid.astro';
+import Reviews from '../components/Reviews.astro';
+import LocationBlock from '../components/LocationBlock.astro';
+import NewToGymCta from '../components/NewToGymCta.astro';
+import { site } from '../config/site';
+import { activationFee, peso } from '../data/rates';
+import type { PhotoId } from '../data/photos';
+
+const newToGym = [
+  {
+    icon: 'clipboard-check',
+    title: 'Free fitness assessment',
+    text: 'We check where you are now so your program starts at the right level.',
+  },
+  {
+    icon: 'user-round-check',
+    title: 'Free basic coaching sessions',
+    text: 'A coach shows you the equipment and your form, step by step.',
+  },
+  {
+    icon: 'compass',
+    title: 'Program orientation',
+    text: 'You leave knowing what to do on your next visit. No guesswork.',
+  },
+];
+
+const whyStay = [
+  {
+    icon: 'wind',
+    title: 'Clean, spacious and well-ventilated',
+    text: 'Members say it best: huge, clean and comfortable every time you train.',
+  },
+  {
+    icon: 'hand-heart',
+    title: 'Supportive coaches',
+    text: 'Helpful, non-judgmental guidance whether it is your first day or your hundredth.',
+  },
+  {
+    icon: 'smile',
+    title: 'Welcoming to beginners',
+    text: 'A real community that feels like a second home, never intimidating.',
+  },
+  {
+    icon: 'map-pin',
+    title: 'In the middle of the city',
+    text: 'Right in Divisoria, with free parking nearby. Easy before or after work.',
+  },
+];
+
+const galleryPreview: PhotoId[] = ['gym-weights', 'zumba', 'boxing', 'community-1', 'gym-machines'];
+---
+
+<BaseLayout
+  title="Gym in Cagayan de Oro | ActiveZone CDO Fitness Studio, Divisoria"
+  description="Beginner-friendly gym and fitness studio in Divisoria, Cagayan de Oro. Zumba, Boxing, HIIT and coaching. Memberships from ₱1,740 (students ₱1,200). Book a visit."
+  ogImage="home"
+>
+  <!-- HERO -->
+  <section class="surface-dark relative isolate overflow-hidden">
+    <Photo
+      id="hero"
+      priority
+      sizes="100vw"
+      widths={[480, 768, 1280, 1600, 1920]}
+      class="!absolute inset-0 -z-10 opacity-60"
+      alt=""
+    />
+    <div class="absolute inset-0 -z-10 bg-gradient-to-t from-night via-night/80 to-night/30 sm:bg-gradient-to-r sm:from-night sm:via-night/85 sm:to-night/20" aria-hidden="true"></div>
+    <div class="container-az pb-24 pt-12 sm:pb-32 sm:pt-20 lg:pb-40 lg:pt-28">
+      <div class="max-w-3xl">
+        <div class="flex flex-wrap items-center gap-3">
+          <AzMark class="h-10 w-auto text-neon" />
+          <OpenBadge />
+        </div>
+        <h1 class="mt-6 text-[clamp(3rem,12vw,6.5rem)] leading-[0.9]">
+          Your gym in Divisoria. <span class="text-neon">No experience needed.</span>
+        </h1>
+        <p class="lede mt-6 max-w-xl text-lg sm:text-xl">
+          Classes, coaching and a clean, welcoming space in the heart of Cagayan de Oro.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href="/memberships/" class="btn btn-neon text-lg">See Membership Rates</a>
+          <a href="/book-a-visit/" class="btn btn-ghost text-lg">Book a Visit <Icon name="arrow-right" size={18} /></a>
+        </div>
+        <p class="mt-8 flex items-start gap-2 text-sm text-white/80">
+          <Icon name="map-pin" size={18} class="mt-0.5 shrink-0 text-neon" />
+          {site.directionsNote}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <StatsStrip />
+
+  <!-- NEW TO THE GYM -->
+  <section class="surface-light cut-top pb-20 sm:pb-28" aria-labelledby="new-title">
+    <div class="container-az grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <p class="eyebrow">New to the gym?</p>
+        <h2 id="new-title" class="h-section mt-3">Wala pa kay gym experience? That’s completely okay.</h2>
+        <p class="lede mt-4">
+          Everyone starts somewhere. Every ActiveZone membership comes with the support you need to feel at home
+          from day one.
+        </p>
+        <ul class="mt-8 space-y-5">
+          {
+            newToGym.map((item) => (
+              <li class="flex gap-4">
+                <span class="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-night text-neon">
+                  <Icon name={item.icon} size={22} />
+                </span>
+                <span>
+                  <span class="block font-display text-2xl font-bold uppercase leading-tight">{item.title}</span>
+                  <span class="mt-1 block text-slate">{item.text}</span>
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-6 text-sm text-slate">
+          Included with membership. The assessment and program orientation are part of the one-time {peso(activationFee.price)} activation.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <a href="/book-a-visit/?new=1" class="btn btn-dark">Book a beginner visit <Icon name="arrow-right" size={18} /></a>
+          <a href="/faq/" class="btn btn-outline-dark">Read the FAQ</a>
+        </div>
+      </div>
+      <div class="reveal relative">
+        <Photo
+          id="coaching"
+          class="aspect-[4/5] rounded-[var(--radius-card)] sm:aspect-[5/4] lg:aspect-[4/5]"
+          sizes="(min-width: 1024px) 50vw, 100vw"
+        />
+        <div class="absolute -bottom-5 left-5 right-5 rounded-2xl bg-night p-5 text-white shadow-xl sm:left-auto sm:max-w-xs">
+          <p class="font-display text-xl font-bold uppercase leading-tight">
+            “Beginner-friendly <span class="text-neon">and welcoming.”</span>
+          </p>
+          <p class="mt-1 text-xs text-mist">Google review</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLANS -->
+  <section class="surface-dark rate-scope cut-top pb-20 sm:pb-28" aria-labelledby="plans-title">
+    <div class="container-az">
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="eyebrow">Memberships</p>
+          <h2 id="plans-title" class="h-section mt-3">Simple plans. <span class="text-neon">Student rates too.</span></h2>
+        </div>
+        <RateToggle name="home-rate" />
+      </div>
+      <div class="mt-10">
+        <PlanCards compact />
+      </div>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a href="/memberships/" class="btn btn-neon">See all rates and the calculator <Icon name="arrow-right" size={18} /></a>
+        <a href="/memberships/#sessions" class="btn btn-ghost">Walk-in & single classes</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLASSES -->
+  <section class="surface-light cut-top-rev pb-20 sm:pb-28" aria-labelledby="classes-title">
+    <div class="container-az">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="eyebrow">Classes & coaching</p>
+          <h2 id="classes-title" class="h-section mt-3">Find your thing</h2>
+          <p class="lede mt-3 max-w-xl">From your first coached session to Zumba, Boxing and HIIT with the group.</p>
+        </div>
+        <a href="/classes/" class="link shrink-0 font-semibold">All classes</a>
+      </div>
+      <div class="mt-10">
+        <ClassGrid />
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY MEMBERS STAY -->
+  <section class="surface-dark cut-top pb-20 sm:pb-28" aria-labelledby="why-title">
+    <div class="container-az">
+      <p class="eyebrow">Why members stay</p>
+      <h2 id="why-title" class="h-section mt-3 max-w-2xl">A second home, <span class="text-neon">not a hardcore gym</span></h2>
+      <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          whyStay.map((item) => (
+            <li class="card-dark reveal p-6">
+              <span class="flex size-12 items-center justify-center rounded-2xl bg-neon/10 text-neon ring-1 ring-neon/30">
+                <Icon name={item.icon} size={22} />
+              </span>
+              <h3 class="mt-5 text-2xl">{item.title}</h3>
+              <p class="mt-2 text-mist">{item.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="surface-light cut-top pb-20 sm:pb-28" aria-labelledby="reviews-title">
+    <div class="container-az">
+      <p class="eyebrow">What members say</p>
+      <h2 id="reviews-title" class="h-section mt-3 mb-8">Rated 5.0 on Google</h2>
+      <Reviews />
+    </div>
+  </section>
+
+  <!-- GALLERY PREVIEW -->
+  <section class="surface-dark cut-top-rev pb-20 sm:pb-28" aria-labelledby="gallery-title">
+    <div class="container-az">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p class="eyebrow">Inside ActiveZone</p>
+          <h2 id="gallery-title" class="h-section mt-3">Take a look around</h2>
+        </div>
+        <a href="/gallery/" class="link shrink-0 font-semibold">Open the gallery</a>
+      </div>
+      <ul class="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4 lg:grid-rows-2">
+        {
+          galleryPreview.map((id, i) => (
+            <li class:list={['reveal', i === 0 && 'col-span-2 row-span-2']}>
+              <a href="/gallery/" class="block h-full rounded-2xl" aria-label="Open the gallery">
+                <Photo
+                  id={id}
+                  class:list={['h-full rounded-2xl', i === 0 ? 'aspect-square lg:aspect-auto' : 'aspect-square']}
+                  sizes={i === 0 ? '(min-width: 1024px) 50vw, 100vw' : '(min-width: 1024px) 25vw, 50vw'}
+                  widths={i === 0 ? [480, 768, 960, 1280] : [360, 480, 640]}
+                />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- LOCATION -->
+  <section class="surface-light cut-top pb-20 sm:pb-28" aria-labelledby="location-title">
+    <div class="container-az">
+      <p class="eyebrow">Find us</p>
+      <h2 id="location-title" class="h-section mt-3">Gym in Divisoria, Cagayan de Oro</h2>
+      <p class="lede mt-3 max-w-2xl">3rd floor of the Guerrero Adaza Building, Rizal corner Hayes Street. Free parking lot and street parking nearby.</p>
+      <AzDivider class="my-8 max-w-xs" />
+      <LocationBlock />
+    </div>
+  </section>
+
+  <NewToGymCta />
+</BaseLayout>

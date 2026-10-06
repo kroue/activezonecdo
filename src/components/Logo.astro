@@ -1,0 +1,23 @@
+---
+import AzMark from './AzMark.astro';
+
+interface Props {
+  class?: string;
+  size?: 'sm' | 'md' | 'lg';
+}
+const { class: className = '', size = 'md' } = Astro.props;
+const markSize = { sm: 'h-7', md: 'h-9', lg: 'h-14' }[size];
+const wordSize = { sm: 'text-xl', md: 'text-2xl', lg: 'text-4xl' }[size];
+---
+
+<span class:list={['inline-flex items-center gap-2.5 text-white', className]}>
+  <AzMark class={`${markSize} w-auto text-neon shrink-0`} />
+  <span class="flex flex-col leading-none">
+    <span class={`font-display font-extrabold tracking-wide uppercase ${wordSize}`}>
+      Active<span class="text-neon">Zone</span>
+    </span>
+    <span class="font-display font-semibold uppercase tracking-[0.22em] text-[0.62rem] text-mist mt-0.5">
+      CDO Fitness Studio
+    </span>
+  </span>
+</span>

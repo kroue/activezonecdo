@@ -1,0 +1,79 @@
+---
+/**
+ * Inline SVG icons, rendered at build time (zero JS, no icon font).
+ * UI icons: Lucide (ISC). Brand icons: Simple Icons (CC0).
+ */
+import { siFacebook, siInstagram, siTiktok, siMessenger, siGoogle } from 'simple-icons';
+
+const lucide = import.meta.glob<string>(
+  [
+    '/node_modules/lucide-static/icons/{phone,map-pin,clock,check,arrow-right,menu,x,calendar,dumbbell,users,shower-head,car,credit-card,sparkles,heart,star,tag,chevron-down,external-link,copy,send,shield-check,smile,wind,building-2,graduation-cap,timer,info,circle-check,badge-check,hand-heart,rainbow,navigation,calculator,message-circle,image,zoom-in,chevron-left,chevron-right,party-popper,clipboard-check,user-round-check,bath,map,compass}.svg',
+  ],
+  { query: '?raw', import: 'default', eager: true },
+);
+
+const brands = {
+  facebook: siFacebook.path,
+  instagram: siInstagram.path,
+  tiktok: siTiktok.path,
+  messenger: siMessenger.path,
+  google: siGoogle.path,
+} as const;
+
+interface Props {
+  name: string;
+  size?: number;
+  class?: string;
+  label?: string;
+  strokeWidth?: number;
+}
+
+const { name, size = 20, class: className, label, strokeWidth = 2 } = Astro.props;
+const a11y = label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': 'true' as const };
+
+let inner = '';
+let isBrand = false;
+if (name in brands) {
+  isBrand = true;
+  inner = `<path d="${brands[name as keyof typeof brands]}"/>`;
+} else {
+  const raw = lucide[`/node_modules/lucide-static/icons/${name}.svg`];
+  if (!raw) throw new Error(`Icon "${name}" is not in the Icon.astro allowlist`);
+  inner = raw
+    .replace(/<!--[\s\S]*?-->/, '')
+    .replace(/^[\s\S]*?<svg[^>]*>/, '')
+    .replace(/<\/svg>\s*$/, '');
+}
+---
+
+{
+  isBrand ? (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="currentColor"
+      class={className}
+      focusable="false"
+      {...a11y}
+      set:html={inner}
+    />
+  ) : (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      width={size}
+      height={size}
+      fill="none"
+      stroke="currentColor"
+      stroke-width={strokeWidth}
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      class={className}
+      focusable="false"
+      {...a11y}
+      set:html={inner}
+    />
+  )
+}

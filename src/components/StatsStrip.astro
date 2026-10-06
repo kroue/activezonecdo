@@ -1,0 +1,68 @@
+---
+import { site } from '../config/site';
+
+const stats = [
+  { value: 5, decimals: 1, prefix: '', suffix: '', label: `on Google (${site.ratings.google.count} reviews)` },
+  { value: site.ratings.facebook.percent, decimals: 0, prefix: '', suffix: '%', label: `recommend on Facebook (${site.ratings.facebook.count} reviews)` },
+  { value: 7, decimals: 0, prefix: '', suffix: '', label: 'class types' },
+  { text: '6AM–10PM', label: 'Monday to Saturday' },
+];
+---
+
+<section aria-label="ActiveZone at a glance" class="bg-charcoal text-white">
+  <div class="container-az pb-20 pt-8 sm:pb-24">
+    <dl class="grid grid-cols-2 gap-x-4 gap-y-7 lg:grid-cols-4">
+      {
+        stats.map((s) => (
+          <div class="flex flex-col border-l-2 border-neon pl-4">
+            <dt class="order-2 mt-1 text-sm leading-snug text-mist">{s.label}</dt>
+            <dd class="price -order-1 text-[2.6rem] text-white sm:text-5xl">
+              {'text' in s ? (
+                s.text
+              ) : (
+                <span data-count={s.value} data-decimals={s.decimals} data-suffix={s.suffix}>
+                  {s.value.toFixed(s.decimals)}
+                  {s.suffix}
+                </span>
+              )}
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<script>
+  // Count-up when the strip scrolls into view. Final values are in the HTML for no-JS and SEO.
+  const els = document.querySelectorAll<HTMLElement>('[data-count]');
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (els.length && !reduce && 'IntersectionObserver' in window) {
+    const run = (el: HTMLElement) => {
+      const target = Number(el.dataset.count);
+      const decimals = Number(el.dataset.decimals || 0);
+      const suffix = el.dataset.suffix || '';
+      const start = performance.now();
+      const dur = 1200;
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - t, 3);
+        el.textContent = (target * eased).toFixed(decimals) + suffix;
+        if (t < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    };
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            run(e.target as HTMLElement);
+            io.unobserve(e.target);
+          }
+        }
+      },
+      { threshold: 0.6 },
+    );
+    els.forEach((el) => io.observe(el));
+  }
+</script>

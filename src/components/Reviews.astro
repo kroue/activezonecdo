@@ -1,0 +1,42 @@
+---
+/** Real Google review excerpts (no names). Rating shown as visible text only, not as markup. */
+import reviews from '../data/reviews.json';
+import { site } from '../config/site';
+import Icon from './Icon.astro';
+
+interface Props {
+  limit?: number;
+}
+const { limit = 4 } = Astro.props;
+const items = reviews.items.slice(0, limit);
+---
+
+<div>
+  <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+    <p class="price text-5xl text-ink">{site.ratings.google.score}</p>
+    <div>
+      <p class="flex gap-0.5 text-[#b07d00]" aria-hidden="true">
+        {Array.from({ length: 5 }).map(() => <Icon name="star" size={18} class="fill-current" />)}
+      </p>
+      <p class="text-sm font-semibold">
+        {site.ratings.google.score} on Google · {site.ratings.google.count} reviews
+      </p>
+    </div>
+    <p class="text-sm text-slate sm:ml-auto">
+      {site.ratings.facebook.percent}% recommend us on Facebook ({site.ratings.facebook.count} reviews)
+    </p>
+  </div>
+  <ul class="mt-8 grid gap-4 sm:grid-cols-2">
+    {
+      items.map((r, i) => (
+        <li class:list={['card-light reveal flex flex-col p-6', i === 0 && 'sm:row-span-1']}>
+          <Icon name="google" size={20} class="text-slate" />
+          <blockquote class="mt-4 flex-1 text-lg font-medium leading-snug text-ink">
+            <p>“{r.quote}”</p>
+          </blockquote>
+          <p class="mt-5 text-sm font-semibold text-leaf">{reviews.source}</p>
+        </li>
+      ))
+    }
+  </ul>
+</div>

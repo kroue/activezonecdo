@@ -1,0 +1,19 @@
+---
+/**
+ * Regular / Student switch. Pure CSS: any element inside the surrounding `.rate-scope`
+ * with .rate-regular / .rate-student swaps when the radio changes. No JavaScript.
+ */
+interface Props {
+  name?: string;
+  class?: string;
+}
+const { name = 'rate', class: className = '' } = Astro.props;
+---
+
+<fieldset class:list={['inline-block', className]}>
+  <legend class="sr-only">Show prices for</legend>
+  <div class="segmented">
+    <label><input type="radio" name={name} value="regular" checked /> Regular</label>
+    <label><input type="radio" name={name} value="student" /> Student</label>
+  </div>
+</fieldset>

@@ -1,0 +1,32 @@
+---
+/** Closing CTA used at the end of every page. */
+import { site } from '../config/site';
+import AzMark from './AzMark.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  title?: string;
+  text?: string;
+}
+const {
+  title = 'New to the gym? Book a visit.',
+  text = 'Come see the space, meet the coaches and ask anything. Dali ra mag-start!',
+} = Astro.props;
+---
+
+<section class="surface-dark cut-top overflow-hidden pb-16 sm:pb-20" aria-labelledby="cta-title">
+  <AzMark cut="transparent" class="pointer-events-none absolute -right-16 -bottom-10 h-72 w-auto text-white/[0.04] sm:h-96" />
+  <div class="container-az relative">
+    <div class="max-w-2xl">
+      <p class="eyebrow">Your first step</p>
+      <h2 id="cta-title" class="h-section mt-3">{title}</h2>
+      <p class="lede mt-4">{text}</p>
+      <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+        <a href="/book-a-visit/" class="btn btn-neon">Book a Visit <Icon name="arrow-right" size={18} /></a>
+        <a href={site.social.messenger} target="_blank" rel="noopener" class="btn btn-ghost">
+          <Icon name="messenger" size={18} /> Message us
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

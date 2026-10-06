@@ -1,0 +1,103 @@
+---
+import { nav, site } from '../config/site';
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import OpenBadge from './OpenBadge.astro';
+
+const path = Astro.url.pathname.replace(/\/?$/, '/');
+const isActive = (href: string) => path === href || (href !== '/' && path.startsWith(href));
+---
+
+<header class="surface-dark sticky top-0 z-40 border-b border-white/10 bg-night/95 backdrop-blur supports-[backdrop-filter]:bg-night/85">
+  <a
+    href="#main"
+    class="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-full focus:bg-neon focus:px-4 focus:py-2 focus:font-bold focus:text-night"
+    >Skip to content</a
+  >
+  <div class="container-az flex h-16 items-center justify-between gap-4 lg:h-[4.5rem]">
+    <a href="/" class="shrink-0 rounded-lg" aria-label={`${site.shortName} home`}>
+      <Logo size="sm" />
+    </a>
+
+    <nav aria-label="Main" class="hidden lg:block">
+      <ul class="flex items-center gap-1">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={isActive(item.href) ? 'page' : undefined}
+                class:list={[
+                  'rounded-full px-3 py-2 text-[0.95rem] font-semibold transition-colors hover:text-neon',
+                  isActive(item.href) ? 'text-neon' : 'text-white/85',
+                ]}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <div class="hidden xl:block"><OpenBadge /></div>
+      <a href={`tel:${site.phone.tel}`} class="btn btn-ghost hidden !min-h-11 !px-4 md:inline-flex" aria-label={`Call ${site.phone.display}`}>
+        <Icon name="phone" size={18} />
+        <span class="hidden lg:inline">{site.phone.display}</span>
+      </a>
+      <a href="/book-a-visit/" class="btn btn-neon hidden !min-h-11 sm:inline-flex">Book a Visit</a>
+
+      <details class="group relative lg:hidden" data-menu>
+        <summary
+          class="flex size-11 cursor-pointer list-none items-center justify-center rounded-full ring-1 ring-white/20 [&::-webkit-details-marker]:hidden"
+          aria-label="Menu"
+        >
+          <Icon name="menu" size={22} class="group-open:hidden" />
+          <Icon name="x" size={22} class="hidden group-open:block" />
+        </summary>
+        <div class="fixed inset-x-0 top-16 z-40 max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-white/10 bg-night px-4 pb-28 pt-4 shadow-2xl">
+          <nav aria-label="Mobile">
+            <ul class="divide-y divide-white/10">
+              {
+                [{ href: '/', label: 'Home' }, ...nav].map((item) => (
+                  <li>
+                    <a
+                      href={item.href}
+                      aria-current={isActive(item.href) && (item.href !== '/' || path === '/') ? 'page' : undefined}
+                      class="flex items-center justify-between py-3.5 font-display text-2xl font-bold uppercase tracking-wide aria-[current=page]:text-neon"
+                    >
+                      {item.label}
+                      <Icon name="arrow-right" size={20} class="text-neon" />
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+          <div class="mt-5 grid gap-3">
+            <a href="/book-a-visit/" class="btn btn-neon w-full">Book a Visit</a>
+            <a href={`tel:${site.phone.tel}`} class="btn btn-ghost w-full"><Icon name="phone" size={18} /> Call {site.phone.display}</a>
+          </div>
+          <OpenBadge class="mt-5" />
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Close the mobile menu on Escape and when a same-page link is tapped.
+  const menu = document.querySelector<HTMLDetailsElement>('[data-menu]');
+  if (menu) {
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && menu.open) {
+        menu.open = false;
+        menu.querySelector('summary')?.focus();
+      }
+    });
+    menu.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) menu.open = false;
+    });
+  }
+</script>

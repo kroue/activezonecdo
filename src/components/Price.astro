@@ -1,0 +1,14 @@
+---
+/** Price that follows the Regular / Student toggle in the nearest .rate-scope. */
+import { peso } from '../data/rates';
+interface Props {
+  regular: number;
+  student: number;
+  class?: string;
+}
+const { regular, student, class: className = '' } = Astro.props;
+---
+
+<span class={className}>
+  <span class="rate-regular">{peso(regular)}</span><span class="rate-student">{peso(student)}</span>
+</span>

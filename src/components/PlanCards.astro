@@ -1,0 +1,73 @@
+---
+import { plans, activationFee, peso } from '../data/rates';
+import Icon from './Icon.astro';
+import Price from './Price.astro';
+
+interface Props {
+  /** Compact cards for the home page teaser. */
+  compact?: boolean;
+  headingLevel?: 'h2' | 'h3';
+}
+const { compact = false, headingLevel = 'h3' } = Astro.props;
+const H = headingLevel;
+---
+
+<div class="grid gap-5 md:grid-cols-2">
+  {
+    plans.map((plan) => (
+      <article
+        class:list={[
+          'card-dark relative flex flex-col p-6 sm:p-8',
+          plan.highlight && '!border-neon/60 shadow-[0_0_0_1px_rgb(63_224_63/0.25),0_20px_60px_-20px_rgb(63_224_63/0.25)]',
+        ]}
+      >
+        {plan.highlight && (
+          <span class="mb-4 self-start rounded-full sm:absolute sm:right-6 sm:top-6 sm:mb-0 bg-neon px-3 py-1 text-xs font-bold uppercase tracking-wider text-night">
+            Classes included
+          </span>
+        )}
+        <H class="text-3xl text-white sm:text-4xl">{plan.name}</H>
+        <p class="mt-2 max-w-[26ch] text-mist">{plan.summary}</p>
+        <p class="mt-6 flex items-end gap-2">
+          <Price regular={plan.price.regular} student={plan.price.student} class="price text-6xl text-neon sm:text-7xl" />
+          <span class="pb-1.5 text-sm font-semibold text-mist">/ {plan.period}</span>
+        </p>
+        <p class="mt-2 text-sm text-mist">
+          <span class="rate-regular">Student rate: {peso(plan.price.student)}</span>
+          <span class="rate-student">Regular rate: {peso(plan.price.regular)}</span>
+        </p>
+        {!compact && (
+          <ul class="mt-6 space-y-3 border-t border-white/10 pt-6">
+            {plan.includes.map((item) => (
+              <li class="flex gap-3">
+                <Icon name="circle-check" size={20} class="mt-0.5 shrink-0 text-neon" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        {compact && (
+          <ul class="mt-5 space-y-2 text-sm">
+            {plan.includes.slice(0, plan.id === 'premium' ? 2 : 3).map((item) => (
+              <li class="flex gap-2.5">
+                <Icon name="check" size={18} class="mt-0.5 shrink-0 text-neon" />
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        <div class="mt-auto pt-8">
+          <a
+            href={`/book-a-visit/?interest=${plan.id}`}
+            class:list={['btn w-full', plan.highlight ? 'btn-neon' : 'btn-ghost']}
+          >
+            Choose {plan.name.replace(' Plan', '')}
+          </a>
+        </div>
+      </article>
+    ))
+  }
+</div>
+<p class="mt-4 text-sm text-mist">
+  Plus a one-time {peso(activationFee.price)} activation fee when you join. Prices are per 4 weeks.
+</p>

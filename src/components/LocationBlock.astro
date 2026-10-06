@@ -1,0 +1,64 @@
+---
+/** Location + hours mini-block. Static map card (no heavy iframe) linking to Google Maps. */
+import { fullAddress, site } from '../config/site';
+import Icon from './Icon.astro';
+import OpenBadge from './OpenBadge.astro';
+import HoursTable from './HoursTable.astro';
+import AzMark from './AzMark.astro';
+---
+
+<div class="grid gap-6 lg:grid-cols-2">
+  <a
+    href={site.mapsUrl}
+    target="_blank"
+    rel="noopener"
+    class="group relative flex min-h-72 flex-col justify-end overflow-hidden rounded-[var(--radius-card)] bg-night p-6 text-white"
+    aria-label="Open ActiveZone CDO in Google Maps"
+  >
+    <!-- Stylized street grid, drawn inline so there is no third-party map script on the page. -->
+    <svg class="absolute inset-0 h-full w-full" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="400" height="300" fill="#151715" />
+      <g stroke="#2a2d2a" stroke-width="10" fill="none">
+        <path d="M-10 70 L410 40" /><path d="M-10 180 L410 150" /><path d="M-10 270 L410 250" />
+        <path d="M60 -10 L90 310" /><path d="M190 -10 L210 310" /><path d="M320 -10 L335 310" />
+      </g>
+      <g stroke="#3a3e3a" stroke-width="18" fill="none">
+        <path d="M-10 120 L410 92" />
+        <path d="M262 -10 L280 310" />
+      </g>
+      <text x="20" y="112" fill="#6f756e" font-size="11" font-family="sans-serif" transform="rotate(-4 20 112)">RIZAL ST</text>
+      <text x="285" y="290" fill="#6f756e" font-size="11" font-family="sans-serif" transform="rotate(-87 285 290)">HAYES ST</text>
+    </svg>
+    <span class="absolute left-[67%] top-[33%] -translate-x-1/2 -translate-y-full" aria-hidden="true">
+      <span class="relative flex size-14 items-center justify-center rounded-full bg-neon shadow-[0_0_0_10px_rgb(63_224_63/0.18)]">
+        <AzMark cut="var(--color-neon)" class="h-6 w-auto text-night" />
+      </span>
+    </span>
+    <span class="relative">
+      <span class="font-display text-2xl font-extrabold uppercase">Divisoria, CDO</span>
+      <span class="mt-1 flex items-center gap-1.5 text-sm font-semibold text-neon">
+        Open in Google Maps <Icon name="external-link" size={14} />
+      </span>
+    </span>
+  </a>
+
+  <div class="card-light p-6 sm:p-8">
+    <OpenBadge tone="light" />
+    <p class="mt-5 flex gap-3">
+      <Icon name="map-pin" size={22} class="mt-0.5 shrink-0 text-leaf" />
+      <span>
+        <span class="block font-semibold">{site.directionsNote}</span>
+        <span class="block text-sm text-slate">{fullAddress}</span>
+      </span>
+    </p>
+    <HoursTable class="mt-5" />
+    <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+      <a href={site.directionsUrl} target="_blank" rel="noopener" class="btn btn-dark">
+        <Icon name="navigation" size={18} /> Get directions
+      </a>
+      <a href={`tel:${site.phone.tel}`} class="btn btn-outline-dark">
+        <Icon name="phone" size={18} /> {site.phone.display}
+      </a>
+    </div>
+  </div>
+</div>

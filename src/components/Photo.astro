@@ -1,0 +1,50 @@
+---
+/**
+ * All site photos go through here. Uses Astro <Image> (AVIF/WebP via Vercel Image Optimization),
+ * explicit dimensions (no layout shift) and lazy loading unless `priority` is set.
+ * Sits on a branded tile so a missing photo degrades gracefully.
+ */
+import { Image } from 'astro:assets';
+import { photos, type PhotoId } from '../data/photos';
+
+interface Props {
+  id: PhotoId;
+  class?: string;
+  imgClass?: string;
+  sizes?: string;
+  widths?: number[];
+  priority?: boolean;
+  shade?: boolean;
+  alt?: string;
+}
+
+const {
+  id,
+  class: className = '',
+  imgClass = '',
+  sizes = '(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw',
+  widths = [360, 480, 640, 768, 960, 1280],
+  priority = false,
+  shade = false,
+  alt,
+} = Astro.props;
+const photo = photos[id];
+---
+
+<div class:list={['photo-tile', shade && 'shade-bottom', className]}>
+  <Image
+    src={photo.src}
+    alt={alt ?? photo.alt}
+    width={photo.width}
+    height={photo.height}
+    widths={widths}
+    sizes={sizes}
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : 'auto'}
+    decoding={priority ? 'sync' : 'async'}
+    quality={priority ? 65 : 60}
+    class={imgClass}
+    onerror="this.style.visibility='hidden'"
+  />
+  <slot />
+</div>

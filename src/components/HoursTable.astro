@@ -1,0 +1,28 @@
+---
+import { site } from '../config/site';
+import { formatTime } from '../lib/hours';
+import { weekDays } from '../data/schedule';
+
+interface Props {
+  tone?: 'dark' | 'light';
+  class?: string;
+}
+const { tone = 'light', class: className = '' } = Astro.props;
+---
+
+<table class:list={['w-full text-left text-[0.95rem]', className]}>
+  <caption class="sr-only">Opening hours</caption>
+  <tbody>
+    {
+      weekDays.map((d) => {
+        const h = site.hours.find((x) => x.day === d.day);
+        return (
+          <tr class:list={['border-b last:border-0', tone === 'dark' ? 'border-white/10' : 'border-line']}>
+            <th scope="row" class="py-2.5 pr-4 font-semibold">{d.label}</th>
+            <td class="py-2.5 text-right tabular">{h ? `${formatTime(h.open)} – ${formatTime(h.close)}` : 'Closed'}</td>
+          </tr>
+        );
+      })
+    }
+  </tbody>
+</table>

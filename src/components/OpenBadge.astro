@@ -1,0 +1,49 @@
+---
+/**
+ * "Open now / Closed" badge in Asia/Manila time. Server renders a neutral hours label,
+ * then a tiny script swaps in the live status. Fixed min-width avoids layout shift.
+ */
+import { site } from '../config/site';
+interface Props {
+  class?: string;
+  tone?: 'dark' | 'light';
+}
+const { class: className = '', tone = 'dark' } = Astro.props;
+---
+
+<az-open-status
+  data-hours={JSON.stringify(site.hours)}
+  class:list={[
+    'inline-flex items-center gap-2 rounded-full px-3 py-1 text-sm font-semibold whitespace-nowrap min-w-[13.5rem]',
+    tone === 'dark' ? 'bg-white/5 text-white ring-1 ring-white/10' : 'bg-white text-ink ring-1 ring-line',
+    className,
+  ]}
+>
+  <span data-dot class="size-2.5 rounded-full bg-mist" aria-hidden="true"></span>
+  <span data-text>Mon–Sat 6 AM–10 PM · Sun 1–9 PM</span>
+</az-open-status>
+
+<script>
+  import { getOpenStatus, type DayHours } from '../lib/hours';
+
+  class AzOpenStatus extends HTMLElement {
+    timer?: number;
+    connectedCallback() {
+      this.update();
+      this.timer = window.setInterval(() => this.update(), 60_000);
+    }
+    disconnectedCallback() {
+      clearInterval(this.timer);
+    }
+    update() {
+      const hours = JSON.parse(this.dataset.hours || '[]') as DayHours[];
+      const status = getOpenStatus(hours);
+      const dot = this.querySelector<HTMLElement>('[data-dot]');
+      const text = this.querySelector<HTMLElement>('[data-text]');
+      if (!dot || !text) return;
+      dot.className = `size-2.5 rounded-full ${status.open ? 'bg-neon shadow-[0_0_0_4px_rgb(63_224_63/0.2)]' : 'bg-[#e5484d]'}`;
+      text.textContent = `${status.label} · ${status.detail}`;
+    }
+  }
+  if (!customElements.get('az-open-status')) customElements.define('az-open-status', AzOpenStatus);
+</script>

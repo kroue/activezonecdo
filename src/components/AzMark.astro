@@ -1,0 +1,31 @@
+---
+/**
+ * The AZ mark, redrawn as a vector from ActiveZone's logo so it stays sharp at any size and
+ * inherits color. To use the original raster logo instead, see README → "Logo".
+ */
+import markSvg from '../assets/brand/az-mark.svg?raw';
+
+interface Props {
+  class?: string;
+  label?: string;
+  /** Color of the thin gap around the dumbbell. Match the background behind the mark. */
+  cut?: string;
+}
+const { class: className = 'h-8 w-auto text-neon', label, cut = 'var(--color-night)' } = Astro.props;
+// Strip the outer <svg> so we can set our own attributes.
+const inner = markSvg
+  .replace(/^[\s\S]*?<svg[^>]*>/, '')
+  .replace(/<\/svg>\s*$/, '')
+  .replace('stroke="#000"', `style="stroke:${cut}"`);
+const a11y = label ? { role: 'img', 'aria-label': label } : { 'aria-hidden': 'true' as const };
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="40 170 670 450"
+  fill="currentColor"
+  class={className}
+  focusable="false"
+  {...a11y}
+  set:html={inner}
+/>

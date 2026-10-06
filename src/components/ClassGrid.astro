@@ -1,0 +1,40 @@
+---
+import { classes, planLabel } from '../data/classes';
+import Photo from './Photo.astro';
+import Icon from './Icon.astro';
+
+const featured = classes.filter((c) => c.featured);
+---
+
+<ul class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+  {
+    featured.map((c, i) => (
+      <li class:list={['reveal', i === 0 && 'col-span-2 lg:col-span-1']}>
+        <a
+          href={`/classes/#${c.id}`}
+          class:list={['group relative block overflow-hidden rounded-[var(--radius-card)] focus-visible:outline-offset-4', i === 0 ? 'aspect-[16/11] lg:aspect-[3/4]' : 'aspect-[3/4]']}
+        >
+          <Photo
+            id={c.photo}
+            class="absolute inset-0 h-full transition-transform duration-500 group-hover:scale-[1.04]"
+            sizes={i === 0 ? '(min-width: 1024px) 25vw, 100vw' : '(min-width: 1024px) 25vw, 50vw'}
+            widths={[360, 480, 640, 768]}
+            shade
+          />
+          <div class="absolute inset-x-0 bottom-0 p-4 text-white sm:p-5">
+            {i === 0 && (
+              <span class="mb-2 inline-block rounded-full bg-neon px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-night">
+                Start here
+              </span>
+            )}
+            <h3 class="text-2xl sm:text-3xl">{c.name}</h3>
+            <p class:list={['mt-1.5 text-sm text-white/85', i !== 0 && 'hidden sm:block']}>{c.short}</p>
+            <p class="mt-2 flex items-center gap-1.5 text-xs font-semibold leading-snug text-neon sm:mt-3">
+              {planLabel[c.plans]} <Icon name="arrow-right" size={14} class="transition-transform group-hover:translate-x-1" />
+            </p>
+          </div>
+        </a>
+      </li>
+    ))
+  }
+</ul>

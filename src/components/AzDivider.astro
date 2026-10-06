@@ -1,0 +1,14 @@
+---
+/** Small AZ mark between two thin neon rules. Decorative. */
+import AzMark from './AzMark.astro';
+interface Props {
+  class?: string;
+}
+const { class: className = '' } = Astro.props;
+---
+
+<div class:list={['flex items-center gap-4', className]} aria-hidden="true">
+  <span class="h-px flex-1 bg-gradient-to-r from-transparent to-neon/70"></span>
+  <AzMark class="h-5 w-auto text-neon" />
+  <span class="h-px flex-1 bg-gradient-to-l from-transparent to-neon/70"></span>
+</div>

@@ -1,0 +1,44 @@
+---
+/** Sticky bottom action bar on phones: Rates, Book a Visit, Call, Messenger. */
+import { site } from '../config/site';
+import Icon from './Icon.astro';
+
+const items = [
+  { href: '/memberships/', label: 'Rates', icon: 'tag' },
+  { href: '/book-a-visit/', label: 'Book a Visit', icon: 'calendar', primary: true },
+  { href: `tel:${site.phone.tel}`, label: 'Call', icon: 'phone' },
+  { href: site.social.messenger, label: 'Messenger', icon: 'messenger', external: true },
+];
+---
+
+<nav
+  aria-label="Quick actions"
+  class="fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-night/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
+>
+  <ul class="grid grid-cols-4">
+    {
+      items.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            {...(item.external ? { target: '_blank', rel: 'noopener' } : {})}
+            class:list={[
+              'flex min-h-[3.75rem] flex-col items-center justify-center gap-1 px-1 text-[0.75rem] font-semibold',
+              item.primary ? 'text-neon' : 'text-white',
+            ]}
+          >
+            <span
+              class:list={[
+                'flex size-8 items-center justify-center rounded-full',
+                item.primary ? 'bg-neon text-night' : 'bg-white/5',
+              ]}
+            >
+              <Icon name={item.icon} size={18} />
+            </span>
+            {item.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
